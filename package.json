@@ -4,13 +4,16 @@
   "description": "API para gerenciar pedidos das mesas de um restaurante",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "knex": "node --import tsx ./node_modules/knex/bin/cli.js"
   },
   "keywords": [],
   "author": "Marcos Henrique Hisano Oshiro",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "knex": "^3.1.0",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
