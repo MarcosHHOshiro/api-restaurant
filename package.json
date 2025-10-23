@@ -1,0 +1,21 @@
+{
+  "name": "api-restaurant",
+  "version": "1.0.0",
+  "description": "API para gerenciar pedidos das mesas de um restaurante",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts"
+  },
+  "keywords": [],
+  "author": "Marcos Henrique Hisano Oshiro",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.9.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}
