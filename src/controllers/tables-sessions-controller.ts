@@ -1,10 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
 import { knex } from '@/database/knex';
+import z from 'zod';
 
 class TablesSessionsController {
     async index(req: Request, res: Response, next: NextFunction) {
         try {
-            return res.status(201).json({ message: "List of table sessions" });
+            const bodySchema = z.object({
+                table_id: z.number(),
+            });
+
+            const { table_id } = bodySchema.parse(req.body);
+
+            await knex<TablesSessionsRepository>('tables_sessions').insert({
+                table_id,
+                opened_at: knex.fn.now(),
+            });
+
+            return res.status(201).json({ message: "Table session created successfully" });
         }
         catch (error) {
             next(error);
