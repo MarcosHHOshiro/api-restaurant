@@ -6,8 +6,12 @@ import { z } from "zod";
 class ProductsController {
     async index(req: Request, res: Response, next: NextFunction) {
         try {
+            const { name } = req.query
 
-            return res.json({ message: 'ok' })
+            const products = await knex("products").select().whereLike("name", `%${name}%`)
+
+
+            return res.json({ message: products })
         } catch (error) {
             next(error);
         }
@@ -32,6 +36,8 @@ class ProductsController {
             next(error);
         }
     }
+
+
 }
 
 export { ProductsController };
