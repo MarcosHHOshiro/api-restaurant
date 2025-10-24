@@ -4,6 +4,8 @@ import { Router } from "express";
 const tablesSessionsRoutes = Router();
 const tablesSessionsController = new TablesSessionsController();
 
-tablesSessionsRoutes.post("/", tablesSessionsController.index);
+tablesSessionsRoutes.get("/", tablesSessionsController.index);
+tablesSessionsRoutes.post("/", tablesSessionsController.create);
+tablesSessionsRoutes.patch("/sessions/:id", tablesSessionsController.update);
 
 export { tablesSessionsRoutes };

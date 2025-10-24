@@ -4,7 +4,7 @@ import { knex } from '@/database/knex';
 import z from 'zod';
 
 class TablesSessionsController {
-    async index(req: Request, res: Response, next: NextFunction) {
+    async create(req: Request, res: Response, next: NextFunction) {
         try {
             const bodySchema = z.object({
                 table_id: z.number(),
@@ -27,6 +27,30 @@ class TablesSessionsController {
             return res.status(201).json({ message: "Table session created successfully" });
         }
         catch (error) {
+            next(error);
+        }
+    }
+
+    async index(req: Request, res: Response, next: NextFunction) {
+        try {
+            const sessions = await knex<TablesSessionsRepository>('tables_sessions').orderBy("closed_at");
+
+            return res.status(200).json(sessions);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async update(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = z
+                .string()
+                .transform((value) => Number(value))
+                .refine((value) => !isNaN(value), { message: "id must be a number" })
+                .parse(req.params.id);
+
+            return res.json({ message: `Update table session with id ${id}` });
+        } catch (error) {
             next(error);
         }
     }
