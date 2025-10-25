@@ -59,6 +59,25 @@ class OrdersController {
             next(error);
         }
     }
+
+    async show(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { table_session_id } = req.params;
+
+            const total = await knex<OrderRepository>("orders")
+                .select(knex.raw("SUM(quantity * price) as total"))
+                .where({ table_session_id: Number(table_session_id) })
+                .first();
+
+            if (!total) {
+                throw new AppError("Order not found", 404);
+            }
+
+            return res.status(200).json(total);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export { OrdersController };
