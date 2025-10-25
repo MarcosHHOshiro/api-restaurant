@@ -6,6 +6,7 @@ import { z } from "zod";
 class OrdersController {
     async create(req: Request, res: Response, next: NextFunction) {
         try {
+
             const bodySchema = z.object({
                 table_session_id: z.number().int().positive(),
                 product_id: z.number().int().positive(),
@@ -14,7 +15,7 @@ class OrdersController {
 
             const { table_session_id, product_id, quantity } = bodySchema.parse(req.body);
 
-            const session = await knex<TablesSessionsRepository>("table_sessions")
+            const session = await knex<TablesSessionsRepository>("tables_sessions")
                 .where({ id: table_session_id })
                 .first();
 
@@ -30,9 +31,25 @@ class OrdersController {
                 throw new AppError("Product not found", 404);
             }
 
+            await knex<OrderRepository>("orders").insert({
+                table_session_id,
+                product_id,
+                quantity,
+                price: product.price
+            });
+
             return res.status(201).json({ message: 'Order created' });
         }
         catch (error) {
+            next(error);
+        }
+    }
+
+    async index(req: Request, res: Response, next: NextFunction) {
+        try {
+            const orders = await knex<OrderRepository>("orders").select("*");
+            return res.status(200).json(orders);
+        } catch (error) {
             next(error);
         }
     }
