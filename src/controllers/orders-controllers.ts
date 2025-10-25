@@ -47,7 +47,13 @@ class OrdersController {
 
     async index(req: Request, res: Response, next: NextFunction) {
         try {
-            const orders = await knex<OrderRepository>("orders").select("*");
+            const { table_session_id } = req.params;
+
+            const orders = await knex<OrderRepository>("orders")
+                .where({ table_session_id: Number(table_session_id) })
+                .select("orders.id", "orders.table_session_id", "orders.quantity", "orders.price", "products.name as product_name")
+                .join("products", "orders.product_id", "products.id");
+
             return res.status(200).json(orders);
         } catch (error) {
             next(error);
